@@ -28,8 +28,7 @@ int client(char *args){
 	server_address.sin_port = htons(port);
 	server_address.sin_addr.s_addr = inet_addr(address);
 	printf("Connecting to server\n");
-	connect(es_socket,(struct sockaddr *)&server_address,sizeof(server_address));
-	if(connect < 0){
+	if((connect(es_socket,(struct sockaddr *)&server_address,sizeof(server_address))) < 0){
 		printf("Failed to connect!\n");
 		exit(EXIT_FAILURE);
 	}
