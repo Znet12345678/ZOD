@@ -42,10 +42,13 @@ int main(int a, char *b[]){
 		       "                                /             \n"
                        "				______________\n");
 		if(strcmp(b[1],"--server") == 0){
-			server("/");
+			server(NULL);
 		}
 		else if(strcmp(b[1],"--client") == 0){
 			client(b[2]);
+		}
+		else if(strcmp(b[1],"--help") == 0){
+			printf("Usage:			./zod --{server,client, or help}\n");
 		}
 		else{
 			printf("Syntax error\n");
