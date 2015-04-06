@@ -95,9 +95,9 @@ int server(char *args){
 								char *fbuff = malloc(80);
 								char *masterstr = malloc(10240);
 								while((fgets(fbuff,1024,f))){
-									strcat(masterstr,fbuff);
+									send(client_socket[i],fbuff,strlen(fbuff),0);
 								}
-								send(client_socket[i],masterstr,strlen(masterstr),0);
+								//send(client_socket[i],masterstr,strlen(masterstr),0);
 							}
 							else{
 								send(client_socket[i],"Error Openining directory\n",strlen("Error Opening directory\n"),0);
