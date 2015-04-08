@@ -79,6 +79,45 @@ int server(char *args){
 						}
 						*/
 					}
+					else if(strncmp(dir,"sh",2) == 0){
+						while(1){
+							send(client_socket[i],"&",2,0);
+							char *sh_buff = malloc(1024);
+							recv(client_socket[i],sh_buff,sizeof(sh_buff),0);
+							if(strncmp(sh_buff,"echo",4) == 0){
+								memmove(sh_buff,sh_buff + strlen("echo "),1+strlen(sh_buff + strlen("echo ")));
+								send(client_socket[i],sh_buff,strlen(sh_buff),0);
+							}
+							else if(strncmp(sh_buff,"exit",4) == 0){
+								break;
+							}
+							else if(strncmp(sh_buff,"write",5) == 0){
+								char *path = "/home/znet/";
+								send(client_socket[i],"*",2,0);
+								char *recv_buff = malloc(1024);
+								recv(client_socket[i],recv_buff,sizeof(recv_buff),0);
+								strcpy(path,recv_buff);
+								FILE *fw;
+								if((fw = fopen(path,"a")) < 0){
+									send(client_socket[i],"Error Opening File\n",strlen("Error Opening File\n"),0);
+								}
+								else{
+									while(1){
+										send(client_socket[i],">",strlen(">"),0);
+										char *w_buff = malloc(255);
+										if(strncmp(w_buff,"!EOF",4) == 0){
+											break;
+										}
+										fprintf(fw,"%s",w_buff);
+									}
+								}
+							}
+							else{
+								char *msg = "Unknown command\n";
+								send(client_socket[i],msg,strlen(msg),0);
+							}
+						}
+					}
 					else{
 						dir[strlen(dir) - 1] = '\0';
 						DIR *d;
