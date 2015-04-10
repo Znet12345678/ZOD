@@ -43,6 +43,9 @@ int client(char *args){
 	}*/
 	while (1){
 		//printf(">");
+		char *buff = malloc(1024);
+		recv(es_socket,buff,sizeof(buff),0);
+		printf("%s",buff);
 		char *recvbuff = malloc(1024);
 		fgets(recvbuff,1024,stdin);
 		send(es_socket,recvbuff,1024,0);

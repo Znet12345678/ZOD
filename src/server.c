@@ -10,7 +10,8 @@
 #define FALSE 0
 //#define PASSWORD 123/*Change to your password*/
 #define PASSLEN 3/*Change to Password Len*/
-int server(char *args){
+int server(int argv,char *args){
+		printf("Argument dump:%d %s\n",argv,args);
 		int es_socket,new_socket,port = 2718,max_clients = 10,client_socket[max_clients],addrlen,opt = TRUE,activity;
 		fd_set rfds;
 		char *PASSWORD = "123"; /*change to your Password*/
@@ -24,12 +25,26 @@ int server(char *args){
 		es_socket = socket(AF_INET,SOCK_STREAM,0);
 		setsockopt(es_socket,SOL_SOCKET,SO_REUSEADDR,(char *)&opt,sizeof(opt));
 		printf("Binding Port: %d\n",port);
-		address.sin_family = AF_INET;
-		address.sin_port = htons(port);
-		address.sin_addr.s_addr = INADDR_ANY;
-		bind(es_socket,(struct sockaddr *)&address,sizeof(address));
+		if (argv < 3){
+			address.sin_family = AF_INET;
+			address.sin_port = htons(port);
+			address.sin_addr.s_addr = INADDR_ANY;
+		}
+		else{
+			address.sin_family = AF_INET;
+			address.sin_port = htons(port);
+			address.sin_addr.s_addr = inet_addr(args);
+		}
+		if((bind(es_socket,(struct sockaddr *)&address,sizeof(address))) != 0){
+			perror("Failed to bind port");
+			exit(EXIT_FAILURE);
+		} 
+
 		printf("Listining on port: %d\n",port);
-		listen(es_socket,max_clients);
+		if((listen(es_socket,max_clients)) < 0){
+			perror("Failed to listen");
+			exit(EXIT_FAILURE);
+		}
 		while(1){
 			/*if(client_socket[i] > 0){
 				DIR *d;

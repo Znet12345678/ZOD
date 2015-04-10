@@ -307,6 +307,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 zod_SOURCES = src/main.c src/server.c src/client.c
+AM_CFLAGS = -std=c99
 all: all-am
 
 .SUFFIXES:

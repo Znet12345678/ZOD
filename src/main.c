@@ -42,7 +42,13 @@ int main(int a, char *b[]){
 		       "                                /             \n"
                        "				______________\n");
 		if(strcmp(b[1],"--server") == 0){
-			server(NULL);
+			if(a > 2){
+				//printf("Exec\n");
+				server(a,b[2]);
+			}
+			else{
+				server(a,NULL);
+			}
 		}
 		else if(strcmp(b[1],"--client") == 0){
 			client(b[2]);
